@@ -1,0 +1,61 @@
+// Gradle build file for SEPP client
+// 'gradle run'     - build and run the code
+// 'gradle jar'     - create a jar file for distribution
+
+apply plugin: 'java'
+
+// this specifies the libraries that the application requires, and the
+// online repository where they are found
+// gradle will automatically download these as required,
+// so you do not need to manually download any library code.
+
+repositories { mavenCentral() }
+
+def currentOS = org.gradle.internal.os.OperatingSystem.current()
+  def platform
+  if (currentOS.isWindows()) {
+    platform = 'win'
+  } else if (currentOS.isLinux()) {
+    platform = 'linux'
+  } else if (currentOS.isMacOsX()) {
+    platform = 'mac'
+  }
+
+dependencies {
+  compile group: 'com.google.code.gson', name: 'gson', version: '2.8.5'
+}
+
+// testing
+
+dependencies {
+  testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+}
+
+test {
+  useJUnitPlatform()
+    testLogging {
+      events 'PASSED', 'FAILED', 'SKIPPED', 'STANDARD_OUT', 'STANDARD_ERROR'
+    }
+}
+
+// execution
+
+// this specifies how to run the program from either the jar, or from IntelliJ
+// if you change the name of the main class, you need to change this
+// otherwise, you probably don't want to change anything here
+
+def mainClassName='shield.Main'
+
+task run(type: JavaExec) {
+  group = "sepp"
+    description = "run the SEPP application"
+    classpath sourceSets.main.runtimeClasspath
+    main = "${mainClassName}"
+}
+
+jar {
+  group = "sepp"
+    description = "create runnable jar file for the SEPP client"
+    manifest { attributes 'Main-Class': "${mainClassName}" }
+}
