@@ -13,6 +13,18 @@ public class SupermarketClientImp implements SupermarketClient {
     return false;
   }
 
+  // **UPDATE2** ADDED METHOD
+  @Override
+  public boolean recordSupermarketOrder(String CHI, int orderNumber) {
+    return false;
+  }
+
+  // **UPDATE**
+  @Override
+  public boolean updateOrderStatus(int orderNumber, String status) {
+    return false;
+  }
+
   @Override
   public boolean isRegistered() {
     return false;

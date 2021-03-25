@@ -4,7 +4,6 @@
 
 package shield;
 
-
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -14,15 +13,17 @@ import java.util.Properties;
 import java.time.LocalDateTime;
 import java.io.InputStream;
 
+import java.util.Random;
+
 /**
  *
  */
 
-public class DummyShieldingIndividualClientTest {
+public class SupermarketClientImpTest {
   private final static String clientPropsFilename = "client.cfg";
 
   private Properties clientProps;
-  private ShieldingIndividualClient client;
+  private SupermarketClient client;
 
   private Properties loadProperties(String propsFilename) {
     ClassLoader loader = Thread.currentThread().getContextClassLoader();
@@ -42,11 +43,18 @@ public class DummyShieldingIndividualClientTest {
   public void setup() {
     clientProps = loadProperties(clientPropsFilename);
 
-    client = new DummyShieldingIndividualClientImp(clientProps.getProperty("endpoint"));
+    client = new SupermarketClientImp(clientProps.getProperty("endpoint"));
   }
 
+
   @Test
-  public void testShowFoodBoxes() {
-    assertEquals(client.showFoodBoxes("none").size(), 3);
+  public void testSupermarketNewRegistration() {
+    Random rand = new Random();
+    String name = String.valueOf(rand.nextInt(10000));
+    String postCode = String.valueOf(rand.nextInt(10000));
+
+    assertTrue(client.registerSupermarket(name, postCode));
+    assertTrue(client.isRegistered());
+    assertEquals(client.getName(), name);
   }
 }
